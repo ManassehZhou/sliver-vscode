@@ -1,0 +1,14 @@
+version: v2
+# Generates the gRPC client stubs from the Sliver protobufs (fetched by `buf`
+# directly from the pinned upstream tag — see the "proto" script in package.json).
+# ts-proto is pinned exactly so output is reproducible; the CI "proto-check" job
+# regenerates and fails on any drift.
+plugins:
+  - local: protoc-gen-ts_proto
+    out: src/grpc
+    opt:
+      - outputServices=grpc-js
+      - esModuleInterop=true
+      - env=node
+      - useOptionals=messages
+      - forceLong=string

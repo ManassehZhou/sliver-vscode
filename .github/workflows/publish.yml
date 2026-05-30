@@ -1,0 +1,55 @@
+name: Publish
+
+# Publishes to the VS Code Marketplace when you push a version tag (e.g. v0.0.1).
+# Requires a repository secret VSCE_PAT — an Azure DevOps Personal Access Token
+# for the "ManassehZhou" publisher (Marketplace > Manage publishers).
+#
+#   git tag v0.0.1 && git push origin v0.0.1
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Verify tag matches package.json version
+        run: |
+          PKG_VERSION="v$(node -p "require('./package.json').version")"
+          if [ "$PKG_VERSION" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version $PKG_VERSION"
+            exit 1
+          fi
+
+      - run: pnpm run check
+
+      - name: Package VSIX
+        run: pnpm run vsix
+
+      - name: Publish to VS Code Marketplace
+        run: pnpm exec vsce publish --no-dependencies --packagePath sliver-vscode.vsix
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: Attach VSIX to the GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sliver-vscode.vsix
