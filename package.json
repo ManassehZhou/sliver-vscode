@@ -1,0 +1,1501 @@
+{
+  "name": "sliver-vscode",
+  "displayName": "Sliver C2",
+  "description": "Operator UI for the Sliver C2 framework — sessions, beacons, shells, listeners and implant generation inside VSCode.",
+  "version": "0.0.2",
+  "publisher": "ManassehZhou",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ManassehZhou/sliver-vscode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ManassehZhou/sliver-vscode/issues"
+  },
+  "homepage": "https://github.com/ManassehZhou/sliver-vscode#readme",
+  "galleryBanner": {
+    "color": "#1a2030",
+    "theme": "dark"
+  },
+  "packageManager": "pnpm@11.5.0",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "sliver",
+    "c2",
+    "red team",
+    "security"
+  ],
+  "icon": "media/sliver.png",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onView:sliverConnections",
+    "onFileSystem:sliver"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sliver",
+          "title": "Sliver",
+          "icon": "media/sliver.svg"
+        }
+      ]
+    },
+    "views": {
+      "sliver": [
+        {
+          "id": "sliverConnections",
+          "name": "Connections"
+        },
+        {
+          "id": "sliverSessions",
+          "name": "Sessions",
+          "when": "sliver.connected"
+        },
+        {
+          "id": "sliverBeacons",
+          "name": "Beacons",
+          "when": "sliver.connected"
+        },
+        {
+          "id": "sliverJobs",
+          "name": "Jobs & Listeners",
+          "when": "sliver.connected"
+        },
+        {
+          "id": "sliverServer",
+          "name": "Server",
+          "when": "sliver.connected"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "sliverConnections",
+        "contents": "No operator configs imported yet.\n[Import operator config](command:sliver.connection.import)\n\nGenerate one on the server with `new-operator`."
+      }
+    ],
+    "commands": [
+      {
+        "command": "sliver.connection.import",
+        "title": "Import Operator Config",
+        "category": "Sliver",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sliver.connection.connect",
+        "title": "Connect",
+        "category": "Sliver",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "sliver.connection.disconnect",
+        "title": "Disconnect",
+        "category": "Sliver",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "sliver.connection.remove",
+        "title": "Remove Connection",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.refresh",
+        "title": "Refresh",
+        "category": "Sliver",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sliver.session.execute",
+        "title": "Run Command",
+        "category": "Sliver",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "sliver.session.shell",
+        "title": "Interactive Shell",
+        "category": "Sliver",
+        "icon": "$(terminal-bash)"
+      },
+      {
+        "command": "sliver.session.ps",
+        "title": "Process List",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.info",
+        "title": "Show Info",
+        "category": "Sliver",
+        "icon": "$(info)"
+      },
+      {
+        "command": "sliver.session.kill",
+        "title": "Kill Session",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.beacon.execute",
+        "title": "Queue Command",
+        "category": "Sliver",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "sliver.beacon.tasks",
+        "title": "Show Tasks",
+        "category": "Sliver",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "sliver.beacon.info",
+        "title": "Show Info",
+        "category": "Sliver",
+        "icon": "$(info)"
+      },
+      {
+        "command": "sliver.job.kill",
+        "title": "Stop Job",
+        "category": "Sliver",
+        "icon": "$(stop)"
+      },
+      {
+        "command": "sliver.listener.start",
+        "title": "Start Listener",
+        "category": "Sliver",
+        "icon": "$(broadcast)"
+      },
+      {
+        "command": "sliver.implant.generate",
+        "title": "Generate Implant",
+        "category": "Sliver",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "sliver.session.browseFiles",
+        "title": "Browse Files",
+        "category": "Sliver",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "sliver.session.download",
+        "title": "Download File",
+        "category": "Sliver",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "sliver.session.upload",
+        "title": "Upload File",
+        "category": "Sliver",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "sliver.session.screenshot",
+        "title": "Screenshot",
+        "category": "Sliver",
+        "icon": "$(device-camera)"
+      },
+      {
+        "command": "sliver.session.ifconfig",
+        "title": "Ifconfig",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.netstat",
+        "title": "Netstat",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.killProcess",
+        "title": "Kill Process",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.procdump",
+        "title": "Dump Process Memory",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.getenv",
+        "title": "Get Environment",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.services",
+        "title": "List Services",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.rename",
+        "title": "Rename",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.beacon.rename",
+        "title": "Rename",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.beacon.remove",
+        "title": "Remove Beacon",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.beacon.taskContent",
+        "title": "View Task Output",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.executeAssembly",
+        "title": "Execute .NET Assembly",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.sideload",
+        "title": "Sideload Library",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.spawnDll",
+        "title": "Spawn DLL",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.migrate",
+        "title": "Migrate",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.getsystem",
+        "title": "Get SYSTEM",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.getprivs",
+        "title": "Get Privileges",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.impersonate",
+        "title": "Impersonate User",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.runas",
+        "title": "Run As",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.makeToken",
+        "title": "Make Token",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.rev2self",
+        "title": "Revert to Self",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.setenv",
+        "title": "Set Environment Variable",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.registryRead",
+        "title": "Registry Read",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.ssh",
+        "title": "Run SSH Command",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.portfwd",
+        "title": "Port Forward",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.rportfwd",
+        "title": "Reverse Port Forward",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.listExtensions",
+        "title": "List Extensions",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.server.refresh",
+        "title": "Refresh",
+        "category": "Sliver",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sliver.loot.delete",
+        "title": "Delete Loot",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.host.delete",
+        "title": "Delete Host",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.build.regenerate",
+        "title": "Regenerate Build",
+        "category": "Sliver",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "sliver.build.delete",
+        "title": "Delete Build",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.profile.delete",
+        "title": "Delete Profile",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.website.delete",
+        "title": "Delete Website",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.monitor.start",
+        "title": "Start Threat Monitoring",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.monitor.stop",
+        "title": "Stop Threat Monitoring",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.cred.delete",
+        "title": "Delete Credential",
+        "category": "Sliver",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sliver.creds.add",
+        "title": "Add Credential",
+        "category": "Sliver",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sliver.loot.download",
+        "title": "Download Loot",
+        "category": "Sliver",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "sliver.loot.add",
+        "title": "Add Loot from File",
+        "category": "Sliver",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sliver.profile.generate",
+        "title": "Generate Implant from Profile",
+        "category": "Sliver",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "sliver.host.details",
+        "title": "Show Host Details",
+        "category": "Sliver",
+        "icon": "$(info)"
+      },
+      {
+        "command": "sliver.website.addContent",
+        "title": "Add Website Content",
+        "category": "Sliver",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sliver.cred.copyUsername",
+        "title": "Copy Username",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.cred.copyPassword",
+        "title": "Copy Password",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.chmod",
+        "title": "Chmod",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.chown",
+        "title": "Chown",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.cp",
+        "title": "Copy File",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.grep",
+        "title": "Grep",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.mount",
+        "title": "List Mounts",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.memfiles",
+        "title": "List Memfiles",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.executeShellcode",
+        "title": "Execute Shellcode",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.msf",
+        "title": "MSF Payload",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.unsetenv",
+        "title": "Unset Environment Variable",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.currentToken",
+        "title": "Current Token Owner",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.beacon.interactive",
+        "title": "Open Interactive Session",
+        "category": "Sliver",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "sliver.session.background",
+        "title": "Background (Close Session)",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.registryWrite",
+        "title": "Registry Write",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.registryCreateKey",
+        "title": "Registry Create Key",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.registryDeleteKey",
+        "title": "Registry Delete Key",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.registryList",
+        "title": "Registry List Keys/Values",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.serviceStart",
+        "title": "Create/Start Service",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.serviceStop",
+        "title": "Stop Service",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.serviceRemove",
+        "title": "Remove Service",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.serviceDetail",
+        "title": "Service Detail",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.backdoor",
+        "title": "Backdoor a File",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.beacon.cancelTask",
+        "title": "Cancel Task",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.wasmExtensions",
+        "title": "List Wasm Extensions",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.socks5",
+        "title": "Start SOCKS5 Proxy",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.pivotListener",
+        "title": "Start Pivot Listener",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.pivotGraph",
+        "title": "Show Pivot Graph",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.wgPortfwd",
+        "title": "WireGuard Port Forward",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.wgSocks",
+        "title": "WireGuard SOCKS",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.session.rportfwdStop",
+        "title": "Stop Reverse Port Forward",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.pivot.list",
+        "title": "List Forwards & Proxies",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.pivot.stopLocal",
+        "title": "Stop Local Forward/Proxy",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.server.certInfo",
+        "title": "Certificate Info",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.server.crackstations",
+        "title": "List Crackstations",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.server.builders",
+        "title": "List Builders",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.server.encoders",
+        "title": "List Traffic Encoders",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.server.httpC2Profiles",
+        "title": "HTTP C2 Profiles",
+        "category": "Sliver"
+      },
+      {
+        "command": "sliver.website.removeContent",
+        "title": "Remove Website Content",
+        "category": "Sliver",
+        "icon": "$(remove)"
+      },
+      {
+        "command": "sliver.session.reconfig",
+        "title": "Reconfigure (Reconnect Interval)…",
+        "category": "Sliver",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "sliver.beacon.reconfig",
+        "title": "Reconfigure (Interval / Jitter)…",
+        "category": "Sliver",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "sliver.profile.edit",
+        "title": "Edit Profile…",
+        "category": "Sliver",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "sliver.cred.edit",
+        "title": "Edit Credential…",
+        "category": "Sliver",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "sliver.loot.rename",
+        "title": "Rename Loot…",
+        "category": "Sliver",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "sliver.profile.stage",
+        "title": "Generate Stager from Profile",
+        "category": "Sliver",
+        "icon": "$(file-zip)"
+      },
+      {
+        "command": "sliver.host.removeIoc",
+        "title": "Remove IOC…",
+        "category": "Sliver",
+        "icon": "$(circle-slash)"
+      },
+      {
+        "command": "sliver.website.updateContent",
+        "title": "Update Website Content…",
+        "category": "Sliver",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "sliver.session.wgPortfwdStop",
+        "title": "Stop WG Port Forward",
+        "category": "Sliver",
+        "icon": "$(stop)"
+      },
+      {
+        "command": "sliver.session.wgSocksStop",
+        "title": "Stop WG SOCKS Proxy",
+        "category": "Sliver",
+        "icon": "$(stop)"
+      },
+      {
+        "command": "sliver.server.rawRpc",
+        "title": "Raw gRPC Request",
+        "category": "Sliver",
+        "icon": "$(symbol-method)"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "sliver.sub.filesystem",
+        "label": "Filesystem"
+      },
+      {
+        "id": "sliver.sub.execute",
+        "label": "Execute"
+      },
+      {
+        "id": "sliver.sub.privileges",
+        "label": "Privileges & Tokens"
+      },
+      {
+        "id": "sliver.sub.registry",
+        "label": "Registry"
+      },
+      {
+        "id": "sliver.sub.services",
+        "label": "Services"
+      },
+      {
+        "id": "sliver.sub.network",
+        "label": "Network & Pivoting"
+      },
+      {
+        "id": "sliver.sub.persistence",
+        "label": "Persistence"
+      },
+      {
+        "id": "sliver.sub.advanced",
+        "label": "Advanced"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "sliver.connection.import",
+          "when": "view == sliverConnections",
+          "group": "navigation@1"
+        },
+        {
+          "command": "sliver.refresh",
+          "when": "view == sliverSessions || view == sliverBeacons || view == sliverJobs",
+          "group": "navigation@1"
+        },
+        {
+          "command": "sliver.listener.start",
+          "when": "view == sliverJobs",
+          "group": "navigation@2"
+        },
+        {
+          "command": "sliver.implant.generate",
+          "when": "view == sliverJobs",
+          "group": "navigation@3"
+        },
+        {
+          "command": "sliver.server.refresh",
+          "when": "view == sliverServer",
+          "group": "navigation@1"
+        },
+        {
+          "command": "sliver.server.certInfo",
+          "when": "view == sliverServer",
+          "group": "1_advanced@1"
+        },
+        {
+          "command": "sliver.server.crackstations",
+          "when": "view == sliverServer",
+          "group": "1_advanced@2"
+        },
+        {
+          "command": "sliver.server.builders",
+          "when": "view == sliverServer",
+          "group": "1_advanced@3"
+        },
+        {
+          "command": "sliver.server.encoders",
+          "when": "view == sliverServer",
+          "group": "1_advanced@4"
+        },
+        {
+          "command": "sliver.server.httpC2Profiles",
+          "when": "view == sliverServer",
+          "group": "1_advanced@5"
+        },
+        {
+          "command": "sliver.server.rawRpc",
+          "when": "view == sliverServer",
+          "group": "1_advanced@6"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "sliver.session.browseFiles",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.session.screenshot",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "1_top@2"
+        },
+        {
+          "submenu": "sliver.sub.filesystem",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@1"
+        },
+        {
+          "submenu": "sliver.sub.execute",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@2"
+        },
+        {
+          "submenu": "sliver.sub.privileges",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@3"
+        },
+        {
+          "submenu": "sliver.sub.registry",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@4"
+        },
+        {
+          "submenu": "sliver.sub.services",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@5"
+        },
+        {
+          "submenu": "sliver.sub.network",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@6"
+        },
+        {
+          "submenu": "sliver.sub.persistence",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@7"
+        },
+        {
+          "submenu": "sliver.sub.advanced",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "2_sub@8"
+        },
+        {
+          "command": "sliver.session.rename",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "8_manage@1"
+        },
+        {
+          "command": "sliver.beacon.interactive",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.beacon.rename",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "8_manage@1"
+        },
+        {
+          "command": "sliver.beacon.taskContent",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "1_actions@3"
+        },
+        {
+          "command": "sliver.beacon.cancelTask",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "1_actions@4"
+        },
+        {
+          "command": "sliver.beacon.remove",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "9_danger"
+        },
+        {
+          "command": "sliver.build.regenerate",
+          "when": "view == sliverServer && viewItem == build",
+          "group": "inline@1"
+        },
+        {
+          "command": "sliver.build.delete",
+          "when": "view == sliverServer && viewItem == build",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.profile.generate",
+          "when": "view == sliverServer && viewItem == profile",
+          "group": "inline@1"
+        },
+        {
+          "command": "sliver.profile.delete",
+          "when": "view == sliverServer && viewItem == profile",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.loot.download",
+          "when": "view == sliverServer && viewItem == loot",
+          "group": "inline@1"
+        },
+        {
+          "command": "sliver.loot.delete",
+          "when": "view == sliverServer && viewItem == loot",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.host.details",
+          "when": "view == sliverServer && viewItem == host",
+          "group": "inline@1"
+        },
+        {
+          "command": "sliver.host.delete",
+          "when": "view == sliverServer && viewItem == host",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.website.addContent",
+          "when": "view == sliverServer && viewItem == website",
+          "group": "inline@1"
+        },
+        {
+          "command": "sliver.website.delete",
+          "when": "view == sliverServer && viewItem == website",
+          "group": "inline@3"
+        },
+        {
+          "command": "sliver.cred.copyUsername",
+          "when": "view == sliverServer && viewItem == cred",
+          "group": "1_copy@1"
+        },
+        {
+          "command": "sliver.cred.copyPassword",
+          "when": "view == sliverServer && viewItem == cred",
+          "group": "1_copy@2"
+        },
+        {
+          "command": "sliver.cred.delete",
+          "when": "view == sliverServer && viewItem == cred",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.creds.add",
+          "when": "view == sliverServer && viewItem == category.creds",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.loot.add",
+          "when": "view == sliverServer && viewItem == category.loot",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.website.addContent",
+          "when": "view == sliverServer && viewItem == category.websites",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.connection.connect",
+          "when": "view == sliverConnections && viewItem == connection.disconnected",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.connection.disconnect",
+          "when": "view == sliverConnections && viewItem == connection.connected",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.connection.remove",
+          "when": "view == sliverConnections && viewItem == connection.disconnected",
+          "group": "9_danger"
+        },
+        {
+          "command": "sliver.session.shell",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.session.execute",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "sliver.session.ps",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "sliver.session.info",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "1_actions@3"
+        },
+        {
+          "command": "sliver.session.kill",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "9_danger"
+        },
+        {
+          "command": "sliver.beacon.execute",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.beacon.tasks",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "sliver.beacon.info",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "sliver.job.kill",
+          "when": "view == sliverJobs && viewItem == job",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.website.removeContent",
+          "when": "view == sliverServer && viewItem == website",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.session.reconfig",
+          "when": "view == sliverSessions && viewItem == session",
+          "group": "8_manage@1"
+        },
+        {
+          "command": "sliver.beacon.reconfig",
+          "when": "view == sliverBeacons && viewItem == beacon",
+          "group": "8_manage@1"
+        },
+        {
+          "command": "sliver.profile.edit",
+          "when": "view == sliverServer && viewItem == profile",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.cred.edit",
+          "when": "view == sliverServer && viewItem == cred",
+          "group": "inline"
+        },
+        {
+          "command": "sliver.loot.rename",
+          "when": "view == sliverServer && viewItem == loot",
+          "group": "inline@2"
+        },
+        {
+          "command": "sliver.profile.stage",
+          "when": "view == sliverServer && viewItem == profile",
+          "group": "inline@3"
+        },
+        {
+          "command": "sliver.host.removeIoc",
+          "when": "view == sliverServer && viewItem == host",
+          "group": "1_manage@1"
+        },
+        {
+          "command": "sliver.website.updateContent",
+          "when": "view == sliverServer && viewItem == website",
+          "group": "1_manage@1"
+        }
+      ],
+      "sliver.sub.filesystem": [
+        {
+          "command": "sliver.session.browseFiles",
+          "group": "1@1"
+        },
+        {
+          "command": "sliver.session.download",
+          "group": "1@2"
+        },
+        {
+          "command": "sliver.session.upload",
+          "group": "1@3"
+        },
+        {
+          "command": "sliver.session.cp",
+          "group": "2@1"
+        },
+        {
+          "command": "sliver.session.chmod",
+          "group": "2@2"
+        },
+        {
+          "command": "sliver.session.chown",
+          "group": "2@3"
+        },
+        {
+          "command": "sliver.session.grep",
+          "group": "3@1"
+        },
+        {
+          "command": "sliver.session.mount",
+          "group": "3@2"
+        },
+        {
+          "command": "sliver.session.memfiles",
+          "group": "3@3"
+        }
+      ],
+      "sliver.sub.execute": [
+        {
+          "command": "sliver.session.execute",
+          "group": "1@1"
+        },
+        {
+          "command": "sliver.session.ps",
+          "group": "1@2"
+        },
+        {
+          "command": "sliver.session.killProcess",
+          "group": "1@3"
+        },
+        {
+          "command": "sliver.session.procdump",
+          "group": "1@4"
+        },
+        {
+          "command": "sliver.session.executeAssembly",
+          "group": "2@1"
+        },
+        {
+          "command": "sliver.session.sideload",
+          "group": "2@2"
+        },
+        {
+          "command": "sliver.session.spawnDll",
+          "group": "2@3"
+        },
+        {
+          "command": "sliver.session.executeShellcode",
+          "group": "2@4"
+        },
+        {
+          "command": "sliver.session.msf",
+          "group": "2@5"
+        },
+        {
+          "command": "sliver.session.migrate",
+          "group": "3@1"
+        },
+        {
+          "command": "sliver.session.ssh",
+          "group": "3@2"
+        }
+      ],
+      "sliver.sub.privileges": [
+        {
+          "command": "sliver.session.getsystem",
+          "group": "1@1"
+        },
+        {
+          "command": "sliver.session.getprivs",
+          "group": "1@2"
+        },
+        {
+          "command": "sliver.session.currentToken",
+          "group": "1@3"
+        },
+        {
+          "command": "sliver.session.impersonate",
+          "group": "2@1"
+        },
+        {
+          "command": "sliver.session.runas",
+          "group": "2@2"
+        },
+        {
+          "command": "sliver.session.makeToken",
+          "group": "2@3"
+        },
+        {
+          "command": "sliver.session.rev2self",
+          "group": "2@4"
+        }
+      ],
+      "sliver.sub.registry": [
+        {
+          "command": "sliver.session.registryRead",
+          "group": "1@1"
+        },
+        {
+          "command": "sliver.session.registryWrite",
+          "group": "1@2"
+        },
+        {
+          "command": "sliver.session.registryList",
+          "group": "1@3"
+        },
+        {
+          "command": "sliver.session.registryCreateKey",
+          "group": "2@1"
+        },
+        {
+          "command": "sliver.session.registryDeleteKey",
+          "group": "2@2"
+        }
+      ],
+      "sliver.sub.services": [
+        {
+          "command": "sliver.session.services",
+          "group": "1@1"
+        },
+        {
+          "command": "sliver.session.serviceDetail",
+          "group": "1@2"
+        },
+        {
+          "command": "sliver.session.serviceStart",
+          "group": "2@1"
+        },
+        {
+          "command": "sliver.session.serviceStop",
+          "group": "2@2"
+        },
+        {
+          "command": "sliver.session.serviceRemove",
+          "group": "2@3"
+        }
+      ],
+      "sliver.sub.network": [
+        {
+          "command": "sliver.session.ifconfig",
+          "group": "1@1"
+        },
+        {
+          "command": "sliver.session.netstat",
+          "group": "1@2"
+        },
+        {
+          "command": "sliver.session.portfwd",
+          "group": "2@1"
+        },
+        {
+          "command": "sliver.session.rportfwd",
+          "group": "2@2"
+        },
+        {
+          "command": "sliver.session.rportfwdStop",
+          "group": "2@3"
+        },
+        {
+          "command": "sliver.session.socks5",
+          "group": "3@1"
+        },
+        {
+          "command": "sliver.session.wgPortfwd",
+          "group": "3@2"
+        },
+        {
+          "command": "sliver.session.wgSocks",
+          "group": "3@3"
+        },
+        {
+          "command": "sliver.session.pivotListener",
+          "group": "4@1"
+        },
+        {
+          "command": "sliver.session.pivotGraph",
+          "group": "4@2"
+        },
+        {
+          "command": "sliver.pivot.list",
+          "group": "5@1"
+        },
+        {
+          "command": "sliver.pivot.stopLocal",
+          "group": "5@2"
+        },
+        {
+          "command": "sliver.session.wgPortfwdStop",
+          "group": "3@4"
+        },
+        {
+          "command": "sliver.session.wgSocksStop",
+          "group": "3@5"
+        }
+      ],
+      "sliver.sub.persistence": [
+        {
+          "command": "sliver.session.backdoor",
+          "group": "1@1"
+        }
+      ],
+      "sliver.sub.advanced": [
+        {
+          "command": "sliver.session.getenv",
+          "group": "1@1"
+        },
+        {
+          "command": "sliver.session.setenv",
+          "group": "1@2"
+        },
+        {
+          "command": "sliver.session.unsetenv",
+          "group": "1@3"
+        },
+        {
+          "command": "sliver.session.listExtensions",
+          "group": "2@1"
+        },
+        {
+          "command": "sliver.session.wasmExtensions",
+          "group": "2@2"
+        },
+        {
+          "command": "sliver.session.background",
+          "group": "3@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "sliver.session.rename",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.rename",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.remove",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.taskContent",
+          "when": "false"
+        },
+        {
+          "command": "sliver.loot.delete",
+          "when": "false"
+        },
+        {
+          "command": "sliver.host.delete",
+          "when": "false"
+        },
+        {
+          "command": "sliver.build.regenerate",
+          "when": "false"
+        },
+        {
+          "command": "sliver.build.delete",
+          "when": "false"
+        },
+        {
+          "command": "sliver.profile.delete",
+          "when": "false"
+        },
+        {
+          "command": "sliver.website.delete",
+          "when": "false"
+        },
+        {
+          "command": "sliver.server.refresh",
+          "when": "false"
+        },
+        {
+          "command": "sliver.cred.delete",
+          "when": "false"
+        },
+        {
+          "command": "sliver.loot.download",
+          "when": "false"
+        },
+        {
+          "command": "sliver.profile.generate",
+          "when": "false"
+        },
+        {
+          "command": "sliver.host.details",
+          "when": "false"
+        },
+        {
+          "command": "sliver.cred.copyUsername",
+          "when": "false"
+        },
+        {
+          "command": "sliver.cred.copyPassword",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.interactive",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.cancelTask",
+          "when": "false"
+        },
+        {
+          "command": "sliver.connection.connect",
+          "when": "false"
+        },
+        {
+          "command": "sliver.connection.disconnect",
+          "when": "false"
+        },
+        {
+          "command": "sliver.connection.remove",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.execute",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.shell",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.ps",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.info",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.kill",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.execute",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.tasks",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.info",
+          "when": "false"
+        },
+        {
+          "command": "sliver.job.kill",
+          "when": "false"
+        },
+        {
+          "command": "sliver.website.removeContent",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.reconfig",
+          "when": "false"
+        },
+        {
+          "command": "sliver.beacon.reconfig",
+          "when": "false"
+        },
+        {
+          "command": "sliver.profile.edit",
+          "when": "false"
+        },
+        {
+          "command": "sliver.cred.edit",
+          "when": "false"
+        },
+        {
+          "command": "sliver.loot.rename",
+          "when": "false"
+        },
+        {
+          "command": "sliver.profile.stage",
+          "when": "false"
+        },
+        {
+          "command": "sliver.host.removeIoc",
+          "when": "false"
+        },
+        {
+          "command": "sliver.website.updateContent",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.wgPortfwdStop",
+          "when": "false"
+        },
+        {
+          "command": "sliver.session.wgSocksStop",
+          "when": "false"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "proto": "buf generate \"https://github.com/BishopFox/sliver.git#tag=v1.7.3,subdir=protobuf\" --path rpcpb/services.proto --path clientpb/client.proto --path sliverpb/sliver.proto --path commonpb/common.proto",
+    "compile": "pnpm run typecheck && pnpm run lint && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --import tsx ./test/unit/*.test.ts",
+    "check": "pnpm run typecheck && pnpm run lint && pnpm run test",
+    "vscode:prepublish": "pnpm run package",
+    "vsix": "vsce package --no-dependencies --out sliver-vscode.vsix",
+    "publish": "vsce publish --no-dependencies"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.70.0",
+    "@bufbuild/protobuf": "^2.12.0",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.19.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.9.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^10.4.0",
+    "ts-proto": "2.11.8",
+    "tsx": "^4.22.0",
+    "typescript": "^6.0.0",
+    "typescript-eslint": "^8.60.0"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.0"
+  }
+}

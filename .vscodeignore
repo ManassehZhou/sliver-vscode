@@ -1,0 +1,23 @@
+# Everything is bundled into dist/extension.js by esbuild, so the .vsix ships
+# only dist/ + media/ + manifest. Exclude sources, tooling, and node_modules.
+.vscode/**
+.github/**
+src/**
+test/**
+out/**
+node_modules/**
+
+**/*.ts
+**/*.map
+!dist/**/*.js
+
+esbuild.js
+tsconfig.json
+.eslintrc.json
+.editorconfig
+.gitignore
+.npmrc
+pnpm-lock.yaml
+pnpm-workspace.yaml
+buf.gen.yaml
+/*.vsix

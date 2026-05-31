@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Proto stubs are in sync with upstream
+        run: |
+          pnpm run proto
+          git diff --exit-code src/grpc \
+            || (echo '::error::src/grpc is stale — run `pnpm run proto` and commit.' && exit 1)
+
+      - run: pnpm run typecheck
+      - run: pnpm run lint
+      - run: pnpm run test
+
+      - name: Package VSIX
+        run: pnpm run vsix
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: sliver-vscode-vsix
+          path: sliver-vscode.vsix
