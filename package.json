@@ -1488,7 +1488,7 @@
     "@types/node": "^22.19.0",
     "@types/vscode": "^1.90.0",
     "@vscode/vsce": "^3.9.0",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "eslint": "^10.4.0",
     "ts-proto": "2.11.8",
     "tsx": "^4.22.0",
