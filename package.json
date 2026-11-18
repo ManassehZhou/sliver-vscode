@@ -1507,6 +1507,6 @@
     "typescript-eslint": "^8.60.0"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.14.0"
+    "@grpc/grpc-js": "^1.14.5"
   }
 }
